@@ -14,7 +14,7 @@ public class App {
 
     public static void main(String[] args) {
         String name = Result.ofFallible(ArrayIndexOutOfBoundsException.class, () -> args[0]).unwrapOrNull();
-        System.out.println(new App().getGreeting(name).expect("Error generating greeting"));
+        System.out.println(new App().getGreeting(name).expectErr("Greeting generated successfully"));
     }
 
     @NotNull

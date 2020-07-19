@@ -1,11 +1,7 @@
 package ru.cerbe.result
 
-class ResultError(override val cause: Throwable?, private val suppliedMessage: String): RuntimeException() {
-    override fun toString(): String {
-        return suppliedMessage + "\nOriginal exception: " + super.toString()
-    }
-}
+class ResultError(message: String, cause: Throwable?) : RuntimeException(message, cause)
 
-class MaybeNullable(passedCause: Throwable?): RuntimeException() {
-    override val cause: Throwable = passedCause ?: NullPointerException()
-}
+class UnexpectedValueError(value: Any) : RuntimeException("Expected Result.Error, got: $value")
+
+class MaybeNullable(cause: Throwable?) : RuntimeException(cause ?: NullPointerException())
