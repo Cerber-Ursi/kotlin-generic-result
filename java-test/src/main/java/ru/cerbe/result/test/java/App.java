@@ -3,14 +3,30 @@
  */
 package ru.cerbe.result.test.java;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import ru.cerbe.result.Result;
 
 public class App {
-    public Result<String, Throwable> getGreeting() {
-        return new Result.Ok<>(null);
+    public Result<String, ? extends Throwable> getGreeting(String name) {
+        return Result.ofFallible(IllegalArgumentException.class, () -> tryGreeting(name));
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        String name = Result.ofFallible(ArrayIndexOutOfBoundsException.class, () -> args[0]).unwrapOrNull();
+        System.out.println(new App().getGreeting(name).expect("Error generating greeting"));
+    }
+
+    @NotNull
+    @Contract("null -> fail")
+    private String tryGreeting(String name) throws IllegalArgumentException {
+        if (name == null) {
+            throw new IllegalArgumentException("Name for the greeter must not be null");
+        } else if (name.equals("")) {
+            throw new IllegalArgumentException("Name for the greater must not be empty");
+        } else if (name.equals("foo")) {
+            throw new IllegalArgumentException("Come on, use a more creative name!");
+        }
+        return "Hello, " + name + "!";
     }
 }
