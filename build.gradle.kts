@@ -1,4 +1,4 @@
-group = "ru.cerbe"
+group = "ru.cerbe.kotlin"
 version = "1.0-SNAPSHOT"
 
 repositories {
